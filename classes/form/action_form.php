@@ -22,10 +22,46 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_cnw_smartcohort\form;
 
-$plugin->component = 'local_cnw_smartcohort';
-$plugin->release = '2.0.5';
-$plugin->version = 2023081800;
-$plugin->requires = 2022041900;
-$plugin->maturity = MATURITY_ALPHA;
+use moodleform;
+
+/**
+ * Class action_form
+ *
+ * @package     local_cnw_smartcohort
+ * @copyright   CNW Rendszerintegrációs Zrt. <moodle@cnw.hu>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class action_form extends moodleform {
+
+    /**
+     * Form definition.
+     *
+     * @return void
+     */
+    public function definition() {
+
+        $mform =& $this->_form;
+
+        $this->add_action_buttons();
+    }
+
+    /**
+     * Form validation.
+     *
+     * @param mixed $data
+     * @param mixed $files
+     * @return array
+     */
+    public function validation($data, $files) {
+
+        $scdata = $this->_customdata['scdata'];
+
+        if (empty($scdata)) {
+            return ['name' => 'required', 'cohort_id' => 'required'];
+        } else {
+            return [];
+        }
+    }
+}

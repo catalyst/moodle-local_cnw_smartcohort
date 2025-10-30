@@ -22,12 +22,9 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Helper function used by the upgrade.php file.
  */
-function local_cnw_smartcohort_helper_function()
-{
+function local_cnw_smartcohort_helper_function() {
     global $DB;
 }

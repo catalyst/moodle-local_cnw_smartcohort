@@ -27,32 +27,36 @@ namespace local_cnw_smartcohort\task;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once __DIR__ . '/../../lib.php';
+require_once(__DIR__ . '/../../lib.php');
 
-class process_queue extends \core\task\scheduled_task
-{
+/**
+ * Scheduled task for queue processing.
+ *
+ * @package     local_cnw_smartcohort
+ * @copyright   CNW Rendszerintegrációs Zrt. <moodle@cnw.hu>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class process_queue extends \core\task\scheduled_task {
 
     /**
      * Return the task's name as shown in admin screens.
      *
      * @return string
      */
-    public function get_name()
-    {
+    public function get_name() {
         return get_string('process_queue_cron', 'local_cnw_smartcohort');
     }
 
     /**
      * Execute the task.
      */
-    public function execute()
-    {
+    public function execute() {
         global $DB;
 
         $users = $DB->get_records('cnw_sc_queue');
 
         foreach ($users as $user) {
-            smartcohort_run_filters($user->user_id);
+            smartcohort_run_rules($user->user_id);
 
             $DB->delete_records('cnw_sc_queue', ['user_id' => $user->user_id]);
         }
