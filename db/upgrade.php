@@ -98,6 +98,8 @@ function xmldb_local_cnw_smartcohort_upgrade($oldversion) {
         $customfields = [];
         foreach ($cfs as $cf) {
             $customfields[$cf->shortname] = $cf->id;
+            // Custom profile fields can be stored with their prefix.
+            $customfields['profile_field_' . $cf->shortname] = $cf->id;
         }
 
         // Convert old filters to new filters.
