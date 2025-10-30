@@ -247,5 +247,34 @@ function xmldb_local_cnw_smartcohort_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2023070403, 'local', 'cnw_smartcohort');
     }
+
+    if ($oldversion < 2023081801) {
+
+        // Update existing null values to the default.
+        $DB->set_field('cnw_sc_filter', 'profile', '-1', ['profile' => null]);
+        $DB->set_field('cnw_sc_filter', 'operator', '0', ['operator' => null]);
+
+        // Changing nullability of field profile on table cnw_sc_filter to not null.
+        $table = new xmldb_table('cnw_sc_filter');
+        $field = new xmldb_field('profile', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '-1', 'field');
+
+        // Launch change of nullability for field profile.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_notnull($table, $field);
+        }
+
+        // Changing nullability of field operator on table cnw_sc_filter to not null.
+        $field = new xmldb_field('operator', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'profile');
+
+        // Launch change of nullability and default for field operator.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_default($table, $field);
+            $dbman->change_field_notnull($table, $field);
+        }
+
+        // Cnw_smartcohort savepoint reached.
+        upgrade_plugin_savepoint(true, 2023081801, 'local', 'cnw_smartcohort');
+    }
+
     return true;
 }
