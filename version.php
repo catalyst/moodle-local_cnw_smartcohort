@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_cnw_smartcohort';
-$plugin->release = '1.0.0';
-$plugin->version = 2019050603;
-$plugin->requires = 2018051700;
-$plugin->maturity = MATURITY_RC;
+$plugin->release = '2.0.5';
+$plugin->version = 2023081801;
+$plugin->requires = 2022041900;
+$plugin->maturity = MATURITY_ALPHA;

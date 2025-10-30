@@ -22,45 +22,46 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_cnw_smartcohort\form;
 
-namespace local_cnw_smartcohort\task;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once(__DIR__ . '/../../lib.php');
+use moodleform;
 
 /**
- * Scheduled task for queue processing.
+ * Class action_form
  *
  * @package     local_cnw_smartcohort
  * @copyright   CNW Rendszerintegrációs Zrt. <moodle@cnw.hu>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class process_queue extends \core\task\scheduled_task {
+class action_form extends moodleform {
 
     /**
-     * Return the task's name as shown in admin screens.
+     * Form definition.
      *
-     * @return string
+     * @return void
      */
-    public function get_name() {
-        return get_string('process_queue_cron', 'local_cnw_smartcohort');
+    public function definition() {
+
+        $mform =& $this->_form;
+
+        $this->add_action_buttons();
     }
 
     /**
-     * Execute the task.
+     * Form validation.
+     *
+     * @param mixed $data
+     * @param mixed $files
+     * @return array
      */
-    public function execute() {
-        global $DB;
+    public function validation($data, $files) {
 
-        $users = $DB->get_records('cnw_sc_queue');
+        $scdata = $this->_customdata['scdata'];
 
-        foreach ($users as $user) {
-            smartcohort_run_rules($user->user_id);
-
-            $DB->delete_records('cnw_sc_queue', ['user_id' => $user->user_id]);
+        if (empty($scdata)) {
+            return ['name' => 'required', 'cohort_id' => 'required'];
+        } else {
+            return [];
         }
-
     }
-
 }
